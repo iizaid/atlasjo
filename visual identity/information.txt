@@ -1,0 +1,5 @@
+phone = +962 795719957
+email = atlasjo.505@gmail.com
+Instagram = https://www.instagram.com/its.atlasjo/
+x.com = https://x.com/its_atlasjo
+youtube = https://www.youtube.com/@its.atlasjo
