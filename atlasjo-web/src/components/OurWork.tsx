@@ -1,154 +1,179 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const allProjects = [
+const projects = [
   {
     number: "01",
-    title: "Real Estate CRM Platform",
-    category: "WEB APPS",
-    description: "A comprehensive CRM solution tailored for real estate agencies to manage leads and properties.",
+    title: "PULSE COFFEE HOUSE",
+    category: "CAFÉ WEBSITE",
+    description: "A polished digital presence focused on menu discovery, location visibility, and a smoother customer experience.",
+    tags: ["WEBSITE", "CAFÉ", "UI DESIGN"],
+    href: "https://pulse-kohl-mu.vercel.app"
   },
   {
     number: "02",
-    title: "E-commerce Website",
-    category: "WEBSITES",
-    description: "A high-performance online store with seamless checkout and inventory management.",
+    title: "SPACE RESTO CAFE",
+    category: "RESTAURANT / CAFÉ WEBSITE",
+    description: "A modern brand-forward website built to present the venue, menu, and key business information in a premium way.",
+    tags: ["WEBSITE", "RESTAURANT", "FRONTEND"],
+    href: "https://space-three-mauve.vercel.app"
   },
   {
     number: "03",
-    title: "Business Analytics Dashboard",
-    category: "WEB APPS",
-    description: "Real-time analytics platform providing actionable insights for enterprise businesses.",
-  },
-  {
-    number: "04",
-    title: "Lead Automation Workflow",
-    category: "AUTOMATION",
-    description: "Automated pipeline that captures, nurtures, and qualifies leads 24/7.",
-  },
-  {
-    number: "05",
-    title: "Fitness Mobile App",
-    category: "MOBILE APPS",
-    description: "A mobile application for personalized workout plans and progress tracking.",
+    title: "IZAID TECH",
+    category: "TECH PORTFOLIO & SERVICES",
+    description: "A professional tech portfolio and services showcase built to highlight expertise, projects, and technical capabilities.",
+    tags: ["PORTFOLIO", "SERVICES", "WEB DEV"],
+    href: "https://izaid.tech"
   }
 ];
 
-const categories = ["ALL PROJECTS", "WEBSITES", "WEB APPS", "AUTOMATION", "MOBILE APPS"];
-
 export default function OurWork() {
-  const [activeFilter, setActiveFilter] = useState("ALL PROJECTS");
+  const sectionRef = useRef<HTMLElement>(null);
 
-  const filteredProjects = activeFilter === "ALL PROJECTS" 
-    ? allProjects 
-    : allProjects.filter(p => p.category === activeFilter);
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Animate project rows on scroll
+      gsap.utils.toArray<HTMLElement>('.work-row').forEach((row) => {
+        gsap.from(row, {
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: row,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          }
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="py-24 md:py-32 bg-[#F9FAFB] text-[#111111]">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+    <section ref={sectionRef} id="work" className="py-24 md:py-32 bg-[#F9FAFB] text-[#111111] overflow-hidden">
+      <div className="site-shell">
         
-        {/* 1. HEADER (2 columns) */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-16">
-          <div className="lg:w-2/3">
-            <span className="text-sm font-bold tracking-[0.2em] text-[#111111]/40 uppercase mb-4 block">
-              OUR WORK
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.1] mb-6">
-              SYSTEMS WE BUILD.<br/>
-              <span className="text-[#2563EB]">RESULTS WE DELIVER.</span>
-            </h2>
-            <p className="text-[#111111]/60 text-lg md:text-xl font-medium">
-              A selection of our most impactful projects.
-            </p>
-          </div>
-          
-          <div className="lg:w-1/3 flex flex-col items-start lg:items-end text-left lg:text-right gap-4">
-            <a href="#" className="font-bold text-[#111111] hover:text-[#2563EB] transition-colors inline-flex items-center gap-2 uppercase tracking-wide text-sm">
-              VIEW ALL PROJECTS 
-              <span className="text-lg leading-none">→</span>
-            </a>
-          </div>
+        {/* HEADER */}
+        <div className="mb-20 md:mb-28 max-w-3xl">
+          <span className="micro-type font-black text-[#111111]/40 mb-4 block">
+            SELECTED WORK
+          </span>
+          <h2 className="display-type text-[clamp(2.5rem,5vw,5.5rem)] leading-[1.05] uppercase mb-8">
+            DIGITAL EXPERIENCES<br/>
+            WE&apos;VE <span className="text-primary">BUILT</span>
+          </h2>
+          <p className="text-[#111111]/60 text-lg md:text-xl font-medium max-w-xl leading-relaxed">
+            A selection of websites and digital systems crafted for real businesses — built for clarity, speed, and conversion.
+          </p>
         </div>
 
-        {/* 2. FILTER TABS (HORIZONTAL ROW) */}
-        <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-16">
-          {categories.map((cat) => (
-            <button 
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
-              className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wide transition-colors ${
-                activeFilter === cat 
-                  ? "bg-[#111111] text-white" 
-                  : "bg-transparent hover:bg-[#111111]/5 text-[#111111]/60"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* 3. PROJECT HORIZONTAL SCROLL (Side by Side Slider) */}
-        {/* Added CSS classes to hide scrollbar while keeping functionality */}
-        <div 
-          className="flex overflow-x-auto gap-6 lg:gap-8 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:-mx-12 md:px-12 lg:-mx-24 lg:px-24"
-        >
-          {filteredProjects.map((project) => (
+        {/* PROJECTS LIST */}
+        <div className="flex flex-col">
+          {projects.map((project) => (
             <div 
               key={project.number} 
-              className="bg-white rounded-[24px] border border-[#111111]/5 overflow-hidden flex flex-col shadow-sm hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-shadow min-w-[85vw] md:min-w-[400px] lg:min-w-[420px] snap-center shrink-0"
+              className="work-row group grid grid-cols-1 lg:grid-cols-[120px_1fr_1.2fr] gap-8 lg:gap-16 py-12 lg:py-20 border-t border-[#111111]/10 first:border-t-0"
             >
               
-              {/* TOP/MAIN: Large image preview with Number */}
-              <div className="relative w-full h-[240px] bg-[#F3F4F6] p-6 border-b border-[#111111]/5 flex flex-col">
-                <span className="text-[#111111]/40 font-mono font-bold text-sm mb-4">
+              {/* 1. NUMBER */}
+              <div className="hidden lg:block">
+                <span className="text-[5rem] lg:text-[7rem] font-black leading-none text-[#111111] tracking-tighter">
                   {project.number}
                 </span>
-                {/* Image Placeholder */}
-                <div className="w-full flex-1 bg-[#E5E7EB] rounded-xl border border-[#111111]/10 hover:bg-[#E5E7EB]/80 transition-colors cursor-pointer"></div>
               </div>
 
-              {/* BOTTOM CONTENT */}
-              <div className="p-8 flex flex-col flex-1 relative">
-                <div className="mb-6">
-                  <span className="inline-block px-3 py-1 bg-[#F3F4F6] text-[#111111]/60 text-xs font-bold uppercase tracking-wider rounded-full mb-4">
-                    {project.category}
+              {/* 2. INFO */}
+              <div className="flex flex-col justify-center">
+                <div className="lg:hidden mb-4">
+                  <span className="text-[4rem] font-black leading-none text-[#111111] tracking-tighter">
+                    {project.number}
                   </span>
-                  <h3 className="text-xl font-bold text-[#111111] mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-[#111111]/60 text-sm font-medium line-clamp-2">
-                    {project.description}
-                  </p>
+                </div>
+                
+                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-[#111111] mb-2">
+                  {project.title}
+                </h3>
+                <span className="text-sm font-bold tracking-widest text-[#111111]/40 uppercase mb-6 block">
+                  {project.category}
+                </span>
+                
+                <p className="text-[#111111]/60 text-base md:text-lg font-medium leading-relaxed mb-10 max-w-md">
+                  {project.description}
+                </p>
+                
+                <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-10">
+                  {project.tags.map(tag => (
+                    <span key={tag} className="text-xs font-bold tracking-widest text-[#111111]/80 uppercase flex items-center gap-2">
+                      <span className="w-1 h-1 rounded-full bg-primary"></span>
+                      {tag}
+                    </span>
+                  ))}
                 </div>
 
-                {/* BOTTOM RIGHT: Circular button */}
-                <div className="absolute bottom-8 right-8">
-                  <div className="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-[#111111] hover:bg-[#2563EB] hover:text-white transition-colors cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
+                <a 
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 text-sm font-black tracking-[0.2em] uppercase text-[#111111] hover:text-primary transition-colors w-fit group/btn"
+                >
+                  <span className="relative overflow-hidden">
+                    <span className="block transition-transform duration-300 group-hover/btn:-translate-y-full">VIEW PROJECT</span>
+                    <span className="absolute top-0 left-0 block translate-y-full transition-transform duration-300 group-hover/btn:translate-y-0 text-primary">VIEW PROJECT</span>
+                  </span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover/btn:translate-x-1">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </div>
+
+              {/* 3. MOCKUP PREVIEW */}
+              <a 
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer" 
+                className="relative w-full rounded-xl overflow-hidden bg-white shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] border border-[#111111]/5 transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] block cursor-pointer mt-6 lg:mt-0"
+              >
+                {/* Browser Window Header */}
+                <div className="h-10 bg-[#F3F4F6] border-b border-[#111111]/5 flex items-center px-4 gap-2 relative z-10">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#111111]/10"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#111111]/10"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#111111]/10"></div>
+                  </div>
+                  <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white px-4 py-1 rounded-md border border-[#111111]/5 text-[10px] text-[#111111]/40 font-mono w-1/2 max-w-[200px] justify-center overflow-hidden whitespace-nowrap">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    {project.href.replace('https://', '')}
                   </div>
                 </div>
-              </div>
+                
+                {/* Live iframe container using scale trick for miniature view */}
+                <div className="w-full relative aspect-[16/10] overflow-hidden bg-white pointer-events-none">
+                  {/* We make the iframe 400% of container width, then scale it down to 25% (0.25). 
+                      This forces a desktop layout render which looks perfect as a thumbnail. */}
+                  <div className="absolute inset-0 w-[400%] h-[400%] origin-top-left scale-[0.25]">
+                    <iframe 
+                      src={project.href} 
+                      tabIndex={-1}
+                      className="w-full h-full border-none pointer-events-none" 
+                    />
+                  </div>
+                  
+                  {/* Overlay to prevent interaction and add subtle hover effect */}
+                  <div className="absolute inset-0 bg-[#111111]/0 group-hover:bg-[#111111]/[0.02] transition-colors z-20"></div>
+                </div>
+              </a>
 
             </div>
           ))}
-
-          {/* Empty state when filtering yields no results */}
-          {filteredProjects.length === 0 && (
-            <div className="w-full flex justify-center py-12 text-[#111111]/40 font-medium">
-              No projects found in this category.
-            </div>
-          )}
-        </div>
-
-        {/* BOTTOM CENTERED CTA BUTTON */}
-        <div className="flex justify-center mt-4">
-          <button className="px-8 py-4 bg-[#2563EB] text-white rounded-full font-bold uppercase tracking-wide hover:bg-[#1D4ED8] transition-colors shadow-lg shadow-blue-500/20">
-            START YOUR PROJECT
-          </button>
         </div>
 
       </div>

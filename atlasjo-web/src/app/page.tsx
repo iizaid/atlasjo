@@ -5,6 +5,7 @@ import Showreel from "@/components/Showreel";
 import Statement from "@/components/Statement";
 import SolutionsWeBuild from "@/components/SolutionsWeBuild";
 import ServicesInteractive from "@/components/ServicesInteractive";
+import OurWork from "@/components/OurWork";
 import TechMarquee from "@/components/TechMarquee";
 import Stats from "@/components/Stats";
 import CTAFooter from "@/components/CTAFooter";
@@ -22,6 +23,7 @@ export default function Home() {
         <Statement />
         <SolutionsWeBuild />
         <ServicesInteractive />
+        <OurWork />
         <TechMarquee />
         <Stats />
         <CTAFooter />
