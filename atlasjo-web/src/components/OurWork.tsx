@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -11,7 +12,8 @@ const projects = [
     category: "CAFÉ WEBSITE",
     description: "A polished digital presence focused on menu discovery, location visibility, and a smoother customer experience.",
     tags: ["WEBSITE", "CAFÉ", "UI DESIGN"],
-    href: "https://pulse-kohl-mu.vercel.app"
+    href: "https://pulse-kohl-mu.vercel.app",
+    image: "/work-1.png"
   },
   {
     number: "02",
@@ -19,7 +21,8 @@ const projects = [
     category: "RESTAURANT / CAFÉ WEBSITE",
     description: "A modern brand-forward website built to present the venue, menu, and key business information in a premium way.",
     tags: ["WEBSITE", "RESTAURANT", "FRONTEND"],
-    href: "https://space-three-mauve.vercel.app"
+    href: "https://space-three-mauve.vercel.app",
+    image: "/work-2.png"
   },
   {
     number: "03",
@@ -27,7 +30,8 @@ const projects = [
     category: "TECH PORTFOLIO & SERVICES",
     description: "A professional tech portfolio and services showcase built to highlight expertise, projects, and technical capabilities.",
     tags: ["PORTFOLIO", "SERVICES", "WEB DEV"],
-    href: "https://izaid.tech"
+    href: "https://izaid.tech",
+    image: "/work-3.png"
   }
 ];
 
@@ -155,20 +159,16 @@ export default function OurWork() {
                   </div>
                 </div>
                 
-                {/* Live iframe container using scale trick for miniature view */}
-                <div className="w-full relative aspect-[16/10] overflow-hidden bg-white pointer-events-none">
-                  {/* We make the iframe 400% of container width, then scale it down to 25% (0.25). 
-                      This forces a desktop layout render which looks perfect as a thumbnail. */}
-                  <div className="absolute inset-0 w-[400%] h-[400%] origin-top-left scale-[0.25]">
-                    <iframe 
-                      src={project.href} 
-                      tabIndex={-1}
-                      className="w-full h-full border-none pointer-events-none" 
-                    />
-                  </div>
-                  
+                {/* Image container for static thumbnails */}
+                <div className="w-full relative aspect-[16/10] overflow-hidden bg-[#F3F4F6]">
+                  <Image
+                    src={project.image}
+                    alt={`${project.title} Preview`}
+                    fill
+                    className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  />
                   {/* Overlay to prevent interaction and add subtle hover effect */}
-                  <div className="absolute inset-0 bg-[#111111]/0 group-hover:bg-[#111111]/[0.02] transition-colors z-20"></div>
+                  <div className="absolute inset-0 bg-[#111111]/0 group-hover:bg-[#111111]/[0.02] transition-colors z-20 pointer-events-none"></div>
                 </div>
               </a>
 
